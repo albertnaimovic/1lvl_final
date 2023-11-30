@@ -66,7 +66,7 @@ class ShoppingCart:
                     for y in items[x]:
                         print(f"{y.capitalize()}: {items[x][y]}")
                 counter += 1
-            print(f"\nTotal price:{self.calculate_total()}")
+            print(f"\nTotal price: {self.calculate_total()}")
             input("\nPress enter to continue...")
         else:
             print("\nCart is empty.")
@@ -81,32 +81,47 @@ class ShoppingCart:
 
 
 shopping_cart = ShoppingCart()
+electronic_items: dict = {
+    "Phone": {"price": 1199.99, "brand": "Apple"},
+    "Computer": {"price": 899.99, "brand": "MSI"},
+    "Fridge": {"price": 499.99, "brand": "Snaige"},
+    "Vaacum cleaner": {"price": 2099.99, "brand": "Dyson"},
+    "Shaver": {"price": 29.99, "brand": "Philips"},
+}
+clothing_items: dict = {
+    "Hat": {"price": 15.99, "size": "Unisex"},
+    "Socks": {"price": 899.99, "size": "43-46"},
+    "Pants": {"price": 499.99, "size": "32"},
+    "Shirt": {"price": 79.99, "size": "M"},
+    "Jacket": {"price": 8.99, "size": "XXL"},
+}
 
 
 def select_item(items: dict, category_type: str, shopping_cart=shopping_cart) -> None:
-    os.system("cls")
-    counter = 1
-    print("\n--List of products--")
-    for x in items:
-        print(f"\n{counter}. {x}")
-        counter += 1
-        for y in items[x]:
-            print(f"{y.capitalize()}: {items[x][y]}")
-
     while True:
+        os.system("cls")
+        counter = 1
+        print("\n--List of products--")
+        for x in items:
+            print(f"\n{counter}. {x}")
+            counter += 1
+            for y in items[x]:
+                print(f"{y.capitalize()}: {items[x][y]}")
+
         try:
             selection = int(input("\nSelect item: ")) - 1
             values_list = list(items)
             selected_item = values_list[selection]
         except Exception:
             print(
-                "Please enter number from list provided without any symbols and spaces."
+                "\nPlease enter number from list provided without any symbols and spaces."
             )
+            time.sleep(2)
             continue
         break
-    os.system("cls")
 
     while True:
+        os.system("cls")
         if category_type == "electronics":
             product = ElectronicProduct(
                 name=selected_item,
@@ -139,31 +154,18 @@ def select_item(items: dict, category_type: str, shopping_cart=shopping_cart) ->
             else:
                 print("\nThere is no such selection.\n")
                 time.sleep(1.5)
-                os.system("cls")
         else:
             print(
                 "\nPlease enter number from list provided without any symbols and spaces.\n"
             )
-            time.sleep(1.5)
-            os.system("cls")
+            time.sleep(2)
 
 
-def online_shop(shopping_cart=shopping_cart) -> None:
-    electronic_items: dict = {
-        "Phone": {"price": 1199.99, "brand": "Apple"},
-        "Computer": {"price": 899.99, "brand": "MSI"},
-        "Fridge": {"price": 499.99, "brand": "Snaige"},
-        "Vaacum cleaner": {"price": 2099.99, "brand": "Dyson"},
-        "Shaver": {"price": 29.99, "brand": "Philips"},
-    }
-    clothing_items: dict = {
-        "Hat": {"price": 15.99, "size": "Unisex"},
-        "Socks": {"price": 899.99, "size": "43-46"},
-        "Pants": {"price": 499.99, "size": "32"},
-        "Shirt": {"price": 79.99, "size": "M"},
-        "Jacket": {"price": 8.99, "size": "XXL"},
-    }
-
+def online_shop(
+    shopping_cart=shopping_cart,
+    electronic_items=electronic_items,
+    clothing_items=clothing_items,
+) -> None:
     while True:
         os.system("cls")
         print("\n-----------------\n|--Online shop--|\n-----------------")
