@@ -51,18 +51,42 @@ class ClothingProduct(Product):
 class ShoppingCart:
     cart_list: list = []
 
-    def __init__(self, item: str) -> None:
-        # self.items = items
-        self.item = item
-
-    def add_item_cart(self) -> list:
-        self.cart_list.append(self.item)
+    def add_item_cart(self, item) -> list:
+        self.cart_list.append(item)
         return self.cart_list
 
+    def display_cart(self) -> None:
+        if self.cart_list:
+            os.system("cls")
+            print("\n--My cart--")
+            counter = 1
+            for items in self.cart_list:
+                for x in items:
+                    print(f"\n{counter}. {x}")
+                    for y in items[x]:
+                        print(f"{y.capitalize()}: {items[x][y]}")
+                counter += 1
+            print(f"\nTotal price:{self.calculate_total()}")
+            input("\nPress enter to continue...")
+        else:
+            print("\nCart is empty.")
+            time.sleep(1.5)
 
-def select_item(items: dict, category_type: str) -> None:
+    def calculate_total(self):
+        total_price = 0
+        for items in self.cart_list:
+            for x in items:
+                total_price += items[x]["price"]
+        return round(total_price, 2)
+
+
+shopping_cart = ShoppingCart()
+
+
+def select_item(items: dict, category_type: str, shopping_cart=shopping_cart) -> None:
     os.system("cls")
     counter = 1
+    print("\n--List of products--")
     for x in items:
         print(f"\n{counter}. {x}")
         counter += 1
@@ -81,30 +105,32 @@ def select_item(items: dict, category_type: str) -> None:
             continue
         break
     os.system("cls")
-    if category_type == "electronics":
-        electronic_product = ElectronicProduct(
-            name=selected_item,
-            price=items[selected_item]["price"],
-            brand=items[selected_item]["brand"],
-        )
-        print(f"\nSelected product:\n\n{electronic_product.display_info()}")
-        print(electronic_product.get_product_brand())
-    elif category_type == "clothing":
-        clothing_product = ClothingProduct(
-            name=selected_item,
-            price=items[selected_item]["price"],
-            size=items[selected_item]["size"],
-        )
-        print(f"\nSelected product:\n\n{clothing_product.display_info()}")
-        print(clothing_product.get_clothing_size())
 
     while True:
+        if category_type == "electronics":
+            product = ElectronicProduct(
+                name=selected_item,
+                price=items[selected_item]["price"],
+                brand=items[selected_item]["brand"],
+            )
+            print(f"\nSelected product:\n\n{product.display_info()}")
+            print(product.get_product_brand())
+        elif category_type == "clothing":
+            product = ClothingProduct(
+                name=selected_item,
+                price=items[selected_item]["price"],
+                size=items[selected_item]["size"],
+            )
+            print(f"\nSelected product:\n\n{product.display_info()}")
+            print(product.get_clothing_size())
+
         add_item_to_cart = input(
             "\n1. Add to cart\n2. Back to menu\n\nEnter number of selection: "
         )
         if add_item_to_cart.isnumeric() == True:
             if add_item_to_cart == "1":
-                ShoppingCart(item={selected_item: items[selected_item]}).add_item_cart()
+                shopping_cart.add_item_cart(item={selected_item: items[selected_item]})
+
                 print(f"\n{selected_item} has been added to the cart.")
                 time.sleep(1.5)
                 break
@@ -120,10 +146,9 @@ def select_item(items: dict, category_type: str) -> None:
             )
             time.sleep(1.5)
             os.system("cls")
-        print(selected_item)
 
 
-def online_shop() -> None:
+def online_shop(shopping_cart=shopping_cart) -> None:
     electronic_items: dict = {
         "Phone": {"price": 1199.99, "brand": "Apple"},
         "Computer": {"price": 899.99, "brand": "MSI"},
@@ -151,7 +176,7 @@ def online_shop() -> None:
             elif category == "2":
                 select_item(clothing_items, category_type="clothing")
             elif category == "3":
-                pass
+                shopping_cart.display_cart()
             elif category == "4":
                 print("\nBye.")
                 break
@@ -165,8 +190,8 @@ def online_shop() -> None:
             time.sleep(2)
 
 
-# if __name__ == "__main__":
-#     try:
-online_shop()
-# except Exception as err:
-#     print(f"You got an error: {err}")
+if __name__ == "__main__":
+    try:
+        online_shop()
+    except Exception as err:
+        print(f"You got an error: {err}")
