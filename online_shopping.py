@@ -144,7 +144,7 @@ def select_item(items: dict, category_type: str, shopping_cart=shopping_cart) ->
         )
         if add_item_to_cart.isnumeric() == True:
             if add_item_to_cart == "1":
-                shopping_cart.add_item_cart(item={selected_item: items[selected_item]})
+                shopping_cart.add_item_cart({selected_item: items[selected_item]})
 
                 print(f"\n{selected_item} has been added to the cart.")
                 time.sleep(1.5)
